@@ -1,29 +1,29 @@
 <ul class="nav nav-tabs nav-justified mb-3">
     {{-- ユーザ詳細タブ --}}
     <li class="nav-item">
-        <a href="{{ route('users.show', ['user' => $user->id]) }}" class="nav-link {{ Request::routeIs('users.show') ? 'active' : '' }}">
+        <a href="{{ route('users.show', ['user' => $view_targetUser->id]) }}" class="nav-link {{ Request::routeIs('users.show') ? 'active' : '' }}">
             TimeLine
-            <span class="badge badge-secondary">{{ $user->microposts_count }}</span>
+            <span class="badge badge-secondary">{{ $view_targetUser->microposts_count }}</span>
         </a>
     </li>
     {{-- フォロー一覧タブ --}}
     <li class="nav-item">
-        <a href="{{ route('users.followings', ['id' => $user->id]) }}" class="nav-link {{ Request::routeIs('users.followings') ? 'active' : '' }}">
+        <a href="{{ route('users.followings', ['id' => $view_targetUser->id]) }}" class="nav-link {{ Request::routeIs('users.followings') ? 'active' : '' }}">
             Followings
-            <span class="badge badge-secondary">{{ $user->followings_count }}</span>
+            <span class="badge badge-secondary">{{ $view_targetUser->followings_count }}</span>
         </a>
     </li>
     {{-- フォロワー一覧タブ --}}
     <li class="nav-item">
-        <a href="{{ route('users.followers', ['id' => $user->id]) }}" class="nav-link {{ Request::routeIs('users.followers') ? 'active' : '' }}">
+        <a href="{{ route('users.followers', ['id' => $view_targetUser->id]) }}" class="nav-link {{ Request::routeIs('users.followers') ? 'active' : '' }}">
             Followers
-            <span class="badge badge-secondary">{{ $user->followers_count }}</span>
+            <span class="badge badge-secondary">{{ $view_targetUser->followers_count }}</span>
         </a>
     </li>
     <li class="nav-item">
-        <a href="{{ route('users.favorites', ['id' => $user->id]) }}" class="nav-link {{ Request::routeIs('users.favorites') ? 'active' : '' }}">
+        <a href="{{ route('users.favorites', ['id' => $view_targetUser->id]) }}" class="nav-link {{ Request::routeIs('users.favorites') ? 'active' : '' }}">
             Favorite posts
-            <span class="badge badge-secondary">{{ $user->favorites_count }}</span>
+            <span class="badge badge-secondary">{{ $view_targetUser->favorites_count }}</span>
         </a>
     </li>
 </ul>

@@ -9,7 +9,7 @@
         <div class="col-sm-8">
             {{-- タブ --}}
             @include('users.navtabs')
-            @if (Auth::id() == $user->id)
+            @if (Auth::id() == $view_targetUser->id)
                 {{-- 投稿フォーム --}}
                 @include('microposts.form')
             @endif

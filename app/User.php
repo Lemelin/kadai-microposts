@@ -37,57 +37,59 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     
-    public function microposts()
+    public function get_userno_microposts()
     {
         return $this->hasMany(Micropost::class);
     }
     
     public function loadRelationshipCounts()
     {
-        $this->loadCount(['microposts', 'followings', 'followers','favorites']);
+        $this->loadCount(['get_userno_microposts', 'get_following_users', 'get_followers','get_favorite_microposts']);
     }
     
-    public function followings()
+    public function get_following_users()
     {
         return $this->belongsToMany(User::class, 'user_follow', 'user_id', 'follow_id')->withTimestamps();
     }
     
-    public function followers()
+
+    
+    public function get_followers()
     {
         return $this->belongsToMany(User::class, 'user_follow', 'follow_id', 'user_id')->withTimestamps();
     }
     
-    public function is_following($userId)
+    public function check_is_following($targetUserId)
     {
-        return $this->followings()->where('follow_id', $userId)->exists();
+        return $this->get_following_users()->where('follow_id', $targetUserId)->exists();
     }
     
-    public function follow($userId)
+    public function follow($targetUserId)
     {
 
-        $exist = $this->is_following($userId);
+        $exist = $this->check_is_following($targetUserId);
 
-        $its_me = $this->id == $userId;
+        $its_me = $this->id == $targetUserId;
 
         if ($exist || $its_me) {
             // すでにフォローしていれば何もしない
             return false;
         } else {
             // 未フォローであればフォローする
-            $this->followings()->attach($userId);
+            $this->get_following_users()->attach($targetUserId);
             return true;
         }
     }
 
-    public function unfollow($userId)
+    public function unfollow($targetUserId)
     {
 
-        $exist = $this->is_following($userId);
-        $its_me = $this->id == $userId;
+        $exist = $this->check_is_following($targetUserId);
+        $its_me = $this->id == $targetUserId;
 
         if ($exist && !$its_me) {
             // すでにフォローしていればフォローを外す
-            $this->followings()->detach($userId);
+            $this->get_following_users()->detach($targetUserId);
             return true;
         } else {
             // 未フォローであれば何もしない
@@ -98,7 +100,7 @@ class User extends Authenticatable
     public function feed_microposts()
     {
         // このユーザがフォロー中のユーザのidを取得して配列にする
-        $userIds = $this->followings()->pluck('users.id')->toArray();
+        $userIds = $this->get_following_users()->pluck('users.id')->toArray();
         // このユーザのidもその配列に追加
         $userIds[] = $this->id;
         // それらのユーザが所有する投稿に絞り込む
@@ -106,45 +108,46 @@ class User extends Authenticatable
     }
     
     //お気に入り
-    public function favorites()
+    public function get_favorite_microposts()
     {
-        return $this->belongsToMany(User::class, 'favorites', 'user_id', 'micropost_id')->withTimestamps();
+        return $this->belongsToMany(Micropost::class, 'favorites', 'user_id', 'micropost_id')->withTimestamps();
     }
     
-    public function is_favorites($micropostId)
+    public function check_is_favorite_microposts($targetMicropostId)
     {
-        return $this->favorites()->where('micropost_id', $micropostId)->exists();
+        return $this->get_favorite_microposts()->where('micropost_id', $targetMicropostId)->exists();
     }
     
-    public function addFavorate($micropostId)
-    {
+    
+    // public function addFavorate($targetMicropostId)
+    // {
 
-        $exist = $this->is_favorites($micropostId);
+    //     $exist = $this->check_is_favorite_microposts($targetMicropostId);
 
-        $its_me = $this->id == $userId;
+    //     $its_me = $this->id == $targetMicropostId;
 
-        if ($exist || $its_me) {
-            return false;
-        } else {
-            $this->favorites()->attach($micropostId);
-            return true;
-        }
-    }
+    //     if ($exist || $its_me) {
+    //         return false;
+    //     } else {
+    //         $this->favorites()->attach($targetMicropostId);
+    //         return true;
+    //     }
+    // }
 
-    public function removeFavorite($micropostId)
-    {
+    // public function removeFavorite($micropostId)
+    // {
 
-        $exist = $this->is_favorites($micropostId);
+    //     $exist = $this->is_favorites($micropostId);
 
-        $its_me = $this->id == $userId;
+    //     $its_me = $this->id == $userId;
 
-        if ($exist && !$its_me) {
-            $this->favorites()->detach($micropostId);
-            return true;
-        } else {
-            return false;
-        }
-    }
+    //     if ($exist && !$its_me) {
+    //         $this->favorites()->detach($micropostId);
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
     
     
 }
