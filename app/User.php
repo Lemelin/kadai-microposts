@@ -119,35 +119,35 @@ class User extends Authenticatable
     }
     
     
-    // public function addFavorate($targetMicropostId)
-    // {
+     public function addFavorite($targetMicropostId)
+    {
 
-    //     $exist = $this->check_is_favorite_microposts($targetMicropostId);
+        $exist = $this->check_is_favorite_microposts($targetMicropostId);
 
-    //     $its_me = $this->id == $targetMicropostId;
+        $its_me = $this->id == $targetMicropostId;
 
-    //     if ($exist || $its_me) {
-    //         return false;
-    //     } else {
-    //         $this->favorites()->attach($targetMicropostId);
-    //         return true;
-    //     }
-    // }
+        if ($exist || $its_me) {
+            return false;
+        } else {
+            $this->get_favorite_microposts()->attach($targetMicropostId);
+            return true;
+        }
+    }
 
-    // public function removeFavorite($micropostId)
-    // {
+    public function delFavorite($targetMicropostId)
+    {
 
-    //     $exist = $this->is_favorites($micropostId);
+        $exist = $this->check_is_favorite_microposts($targetMicropostId);
 
-    //     $its_me = $this->id == $userId;
+        $its_me = $this->id == $targetMicropostId;
 
-    //     if ($exist && !$its_me) {
-    //         $this->favorites()->detach($micropostId);
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
+        if ($exist && !$its_me) {
+            $this->get_favorite_microposts()->detach($targetMicropostId);
+            return true;
+        } else {
+            return false;
+        }
+    }
     
     
 }

@@ -9,12 +9,8 @@
         <div class="col-sm-8">
             {{-- タブ --}}
             @include('users.navtabs')
-            @if (Auth::id() == $user->id)
-                {{-- @include('microposts.form')--}}
-                
-            @endif
-            {{-- @include('microposts.microposts') --}}
-            
+            {{-- ユーザ一覧 --}}
+            @include('microposts.favorite_microposts')
         </div>
     </div>
 @endsection

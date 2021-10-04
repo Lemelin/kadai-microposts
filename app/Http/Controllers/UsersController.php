@@ -72,17 +72,15 @@ class UsersController extends Controller
         ]);
     }
     
-    // public function favorites($id)
-    // {
-    //     $user = User::findOrFail($id);
+    public function favorites($id)
+    {
+        $user = User::findOrFail($id);
+        $user->loadRelationshipCounts();
 
-    //     $user->loadRelationshipCounts();
-
-    //     $userFavorites = $user->favorites()->orderBy('created_at', 'desc')->paginate(10);
-
-    //     return view('favorites.favorites', [
-    //         'user' => $user,
-    //         'favorites' => $userFavorites,
-    //     ]);
-    // }
+        $userFavorites = $user->get_favorite_microposts()->orderBy('created_at', 'desc')->paginate(10);
+            
+        return view('microposts.favorite',[
+            'view_targetUser' => $user,
+            'view_favorite_microposts' => $userFavorites,]);
+    }
 }
